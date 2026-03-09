@@ -1,0 +1,560 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+:root {
+  color-scheme: light;
+  --bg: #f2f5f8;
+  --bg-2: #e7edf3;
+  --surface: #ffffff;
+  --surface-2: #f8f9fb;
+  --ink: #1a2230;
+  --muted: #5b6473;
+  --border: #d3d9e2;
+  --accent: #2e6bff;
+  --accent-2: #13b38b;
+  --shadow: 0 12px 30px rgba(20, 31, 54, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 10% 10%, #ffffff 0%, transparent 45%),
+    radial-gradient(circle at 90% 0%, #e1efff 0%, transparent 50%),
+    linear-gradient(135deg, var(--bg) 0%, var(--bg-2) 100%);
+}
+
+#root {
+  min-height: 100dvh;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.toolbar-shell {
+  background: var(--surface);
+  border-radius: 0;
+  padding: 12px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  width: 100%;
+  min-width: 0;
+  transition: box-shadow 200ms ease, border-color 200ms ease;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.toolbar-content {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 260ms ease, opacity 180ms ease;
+}
+
+.toolbar-content.is-open {
+  opacity: 1;
+}
+
+.toolbar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toolbar-title {
+  font-size: clamp(16px, 4.4vw, 20px);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.toolbar-subtitle {
+  color: var(--muted);
+  font-size: clamp(11px, 3.5vw, 13px);
+  line-height: 1.3;
+}
+
+.toolbar-toggle {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--ink);
+  font-size: 24px;
+  line-height: 1;
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.toolbar-toggle-icon {
+  transition: transform 180ms ease;
+}
+
+.toolbar-toggle-icon.is-open {
+  transform: rotate(45deg);
+}
+
+.toolbar-grid {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  gap: 8px;
+  padding-bottom: 4px;
+}
+
+.draggable-node {
+  min-height: 52px;
+  min-width: 104px;
+  flex: 0 0 auto;
+  padding: 8px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #1f2937;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.2px;
+  border: 1px solid #d7dde7;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.draggable-node:hover {
+  transform: translateY(-2px);
+  border-color: #8b5cf6;
+  background: #f5f3ff;
+  color: #4338ca;
+}
+
+.draggable-node:hover .draggable-node-icon {
+  color: #4338ca;
+}
+
+.draggable-node-label {
+  font-size: clamp(12px, 3.4vw, 14px);
+  line-height: 1.2;
+  text-align: center;
+}
+
+.draggable-node-icon {
+  margin-bottom: 4px;
+  color: #7c3aed;
+}
+
+.canvas-shell {
+  position: relative;
+  height: 100%;
+  min-height: 0;
+  border-radius: 0;
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: none;
+  border: 0;
+}
+
+.canvas-shell .react-flow {
+  height: 100%;
+}
+
+.submit-button {
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  font-weight: 600;
+  width: auto;
+  min-height: 36px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: white;
+  box-shadow: 0 10px 20px rgba(46, 107, 255, 0.25);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.submit-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(46, 107, 255, 0.32);
+}
+
+.toolbar-submit-button {
+  min-width: 88px;
+}
+
+.node-shell {
+  position: relative;
+  width: 190px;
+  min-height: 90px;
+  border: 1px solid var(--node-key-color, var(--border));
+  border-radius: 14px;
+  padding: 10px 12px;
+  background: var(--node-bg-color, var(--surface));
+  box-shadow: 0 8px 16px rgba(24, 32, 52, 0.08);
+  font-size: 12px;
+  color: var(--ink);
+}
+
+
+.react-flow__handle {
+  border-radius: 999px;
+}
+
+.react-flow__handle:hover {
+  border-color: var(--node-key-color, #9ca3af);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.85);
+}
+
+.node-remove-button {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #d9dee8;
+  border-radius: 999px;
+  background: #f8fafc;
+  color: #5b6473;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 0;
+}
+
+.node-remove-button:hover {
+  background: #fee2e2;
+  border-color: #fecaca;
+  color: #991b1b;
+}
+
+.node-remove-button.is-armed {
+  background: #fee2e2;
+  border-color: #dc2626;
+  color: #b91c1c;
+}
+
+.node-title {
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.2px;
+}
+
+.node-heading {
+  margin-bottom: 8px;
+}
+
+.node-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.node-title-icon {
+  color: #5b6473;
+  flex-shrink: 0;
+}
+
+.node-subtitle {
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.node-body {
+  display: grid;
+  gap: 8px;
+}
+
+
+.node-field label {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.node-field input,
+.node-field select,
+.node-field textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 8px;
+  font-size: 12px;
+  background: var(--surface-2);
+  color: var(--ink);
+  outline: none;
+}
+
+.node-field textarea {
+  resize: none;
+  font-family: "IBM Plex Mono", "Consolas", monospace;
+  line-height: 1.4;
+  border: none;
+}
+
+.text-node-shell .node-body {
+  gap: 6px;
+}
+
+.text-node-textarea {
+  min-height: 22px;
+  flex: 1 1 120px;
+  width: auto;
+  resize: none;
+  border: none;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none !important;
+  margin: 0;
+  overflow: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.text-node-textarea:focus {
+  outline: none;
+}
+
+.text-input-shell {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: center;
+  gap: 6px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  min-height: 40px;
+  padding: 6px 8px;
+  background: var(--surface-2);
+}
+
+.text-input-shell:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(46, 107, 255, 0.12);
+}
+
+.text-node-textarea::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.text-variable-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin: 0;
+}
+
+.text-variable-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #f3f0ff;
+  border: 1px solid #d6c7ff;
+  color: #4c1d95;
+  border-radius: 8px;
+  padding: 3px 6px;
+  font-size: 11px;
+  line-height: 1.1;
+}
+
+.text-variable-chip-remove {
+  border: none;
+  background: transparent;
+  color: #8a84a3;
+  font-size: 12px;
+  line-height: 1;
+  padding: 0;
+  cursor: pointer;
+}
+
+.text-variable-chip-remove:hover {
+  color: #5b21b6;
+}
+
+.node-field input:focus,
+.node-field select:focus,
+.node-field textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(46, 107, 255, 0.12);
+}
+
+.node-field input[type='checkbox'] {
+  width: auto;
+  margin: 0;
+}
+
+.text-input-shell .text-node-textarea:focus {
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.text-input-shell .text-node-textarea::-webkit-resizer {
+  display: none;
+}
+
+.node-help {
+  font-size: 10px;
+  color: #7b8493;
+}
+
+.node-note {
+  font-size: 11px;
+  color: var(--muted);
+  background: #eef2ff;
+  border-radius: 8px;
+  padding: 6px 8px;
+}
+
+.edge-delete-button {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  border: 1px solid #fecaca;
+  background: #ffffff;
+  color: #b91c1c;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 8px 16px rgba(20, 31, 54, 0.2);
+  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+  z-index: 10;
+  pointer-events: all;
+}
+
+.edge-delete-button.is-armed {
+  background: #fee2e2;
+  border-color: #ef4444;
+  color: #991b1b;
+}
+
+.react-flow__controls {
+  box-shadow: none;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.react-flow__controls-button {
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  color: var(--ink);
+}
+
+.react-flow__minimap {
+  width: 180px;
+  height: 110px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: transparent;
+  box-shadow: 0 10px 24px rgba(20, 31, 54, 0.16);
+}
+
+.react-flow__minimap svg {
+  display: block;
+}
+
+.react-flow__attribution {
+  display: none;
+}
+
+@media (min-width: 600px) {
+  .toolbar-shell {
+    padding: 16px;
+  }
+
+  .toolbar-grid {
+    display: grid;
+    overflow: visible;
+    padding-bottom: 0;
+    max-width: none;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .toolbar-toggle {
+    width: 36px;
+    height: 36px;
+  }
+
+  .react-flow__minimap {
+    width: 180px;
+    height: 110px;
+  }
+
+  .node-shell {
+    width: 210px;
+  }
+}
+
+@media (min-width: 900px) {
+  .toolbar-shell {
+    padding: 20px;
+  }
+
+  .toolbar-title {
+    font-size: 20px;
+  }
+
+  .toolbar-subtitle {
+    font-size: 13px;
+  }
+
+  .toolbar-grid {
+    margin-top: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+    gap: 12px;
+  }
+
+  .draggable-node {
+    min-height: 64px;
+    font-size: 14px;
+  }
+
+  .react-flow__minimap {
+    width: clamp(220px, 22vw, 320px);
+    height: clamp(130px, 13vw, 190px);
+  }
+
+  .node-shell {
+    width: 220px;
+  }
+}
