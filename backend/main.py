@@ -1,15 +1,23 @@
 import logging
 import os
 from collections import defaultdict, deque
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, ConfigDict
 
+try:
+    from dotenv import load_dotenv
+except ImportError:  # pragma: no cover
+    load_dotenv = None
+
 logger = logging.getLogger("pipeline_api")
 logging.basicConfig(level=logging.INFO)
 
+if load_dotenv is not None:
+    load_dotenv(Path(__file__).resolve().parent / ".env")
 
 
 app = FastAPI(
@@ -20,9 +28,9 @@ app = FastAPI(
 
 
 def _parse_origins() -> List[str]:
-    raw = os.getenv("CORS_ALLOW_ORIGINS", "*")
+    raw = os.getenv("CORS_ALLOW_ORIGINS", "http://localhost:3000")
     origins = [origin.strip() for origin in raw.split(",") if origin.strip()]
-    return origins or ["*"]
+    return origins or ["http://localhost:3000"]
 
 
 app.add_middleware(
