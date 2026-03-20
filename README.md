@@ -1,22 +1,54 @@
 # Automation Node
 
-A visual pipeline builder with DAG validation.
+<p align="center">
+  <strong>A visual workflow builder made with React Flow + FastAPI</strong>
+</p>
 
-This project includes:
-- `frontend`: React + React Flow UI to build pipelines with draggable nodes and connections.
-- `backend`: FastAPI service that validates submitted pipelines and checks whether they form a DAG.
+<p align="center">
+  Build pipelines visually, connect custom nodes, and validate the flow on the backend.
+</p>
 
-## Features
+<p align="center">
+  <img src="https://img.shields.io/badge/Frontend-React-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React" />
+  <img src="https://img.shields.io/badge/Flow-React%20Flow-0EA5E9?style=for-the-badge" alt="React Flow" />
+  <img src="https://img.shields.io/badge/Backend-FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI" />
+  <img src="https://img.shields.io/badge/Purpose-Learning%20Project-F59E0B?style=for-the-badge" alt="Learning Project" />
+</p>
 
-- Drag-and-drop pipeline canvas
-- Multiple node types (Input, LLM, Output, Text, Filter, Merge, Delay, API, Switch)
+---
+
+## What Is This? 
+
+Automation Node is a visual pipeline builder where workflows are created by connecting nodes on a canvas. The frontend is built with React and React Flow, while the backend uses FastAPI to receive the pipeline data, validate it, and check whether the structure forms a valid DAG.
+
+This project is a hands-on learning build I made to understand how React Flow works in a real app and how frontend and backend pieces connect together.
+
+## Why I Built It
+
+I created this project to learn:
+
+- how React Flow works under the hood
+- how node-based UIs are built in React
+- how to manage nodes, edges, and canvas interactions
+- how frontend data is sent to a backend API
+- how backend validation works for graph-like workflow data
+- how DAG validation helps confirm whether a pipeline is valid
+
+## Highlights
+
+- Flow-based UI with draggable nodes
+- Custom node types for building different pipeline steps
 - Edge connections between nodes
-- One-click pipeline submission from UI
-- Backend validation for:
-  - node/edge counts
-  - invalid edge references
-  - self-loops
-  - DAG/cycle detection
+- Frontend submission to the backend
+- Backend validation for invalid edges and self-loops
+- DAG detection to check if the pipeline contains cycles
+
+## Tech Stack
+
+- `React`
+- `React Flow`
+- `FastAPI`
+- `Pydantic`
 
 ## Project Structure
 
@@ -27,15 +59,12 @@ Automation node/
   frontend/
     src/
     public/
-    package.json
+  README.md
 ```
 
-## Prerequisites
+## Run Locally
 
-- Node.js 18+ and npm
-- Python 3.10+
-
-## Backend Setup (FastAPI)
+### Backend
 
 ```bash
 cd backend
@@ -43,15 +72,13 @@ python -m pip install fastapi uvicorn pydantic
 python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-Backend runs at: `http://localhost:8000`
+Backend runs at:
 
-Health check:
-
-```bash
-curl http://localhost:8000/
+```text
+http://localhost:8000
 ```
 
-## Frontend Setup (React)
+### Frontend
 
 ```bash
 cd frontend
@@ -59,50 +86,38 @@ npm install
 npm start
 ```
 
-Frontend runs at: `http://localhost:3000`
+Frontend runs at:
+
+```text
+http://localhost:3000
+```
 
 ## API
 
 ### `POST /pipelines/parse`
 
-Validates a pipeline payload and returns summary + DAG status.
+This endpoint receives the pipeline from the frontend and returns:
 
-Request body:
+- number of nodes
+- number of edges
+- whether the pipeline is a DAG
+- any invalid edges found during validation
 
-```json
-{
-  "nodes": [
-    { "id": "node-1", "type": "customInput", "data": {} }
-  ],
-  "edges": [
-    { "source": "node-1", "target": "node-2" }
-  ]
-}
-```
+## What I Learned
 
-Response:
+While building this project, I got practical experience with:
 
-```json
-{
-  "num_nodes": 2,
-  "num_edges": 1,
-  "is_dag": true,
-  "invalid_edges": null
-}
-```
+- building graph-based interfaces using React Flow
+- connecting frontend state to backend API requests
+- validating structured workflow data on the backend
+- detecting cycles in a pipeline graph
+- thinking about how visual automation tools work behind the scenes
 
-## CORS Configuration
+## Final Note
 
-The backend uses `CORS_ALLOW_ORIGINS` (comma-separated) and defaults to `*`.
+This is a learning project, but it helped me explore both sides of the app:
 
-Example:
+- the frontend experience of creating flows visually
+- the backend logic that validates whether those flows actually make sense
 
-```bash
-set CORS_ALLOW_ORIGINS=http://localhost:3000
-```
-
-## Development Notes
-
-- The frontend currently calls `http://localhost:8000/pipelines/parse` directly.
-- Start backend before submitting from the frontend UI.
-- This repository contains both frontend and backend in a single project.
+That combination was the main reason I built Automation Node.
