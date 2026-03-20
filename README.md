@@ -11,8 +11,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Frontend-React-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React" />
   <img src="https://img.shields.io/badge/Flow-React%20Flow-0EA5E9?style=for-the-badge" alt="React Flow" />
-  <img src="https://img.shields.io/badge/Backend-FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI" />
-  <img src="https://img.shields.io/badge/Purpose-Learning%20Project-F59E0B?style=for-the-badge" alt="Learning Project" />
+  <img src="https://img.shields.io/badge/Backend-FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI" />/>
 </p>
 
 ---
