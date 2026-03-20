@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { LoaderCircle } from 'lucide-react';
 import { useStore } from './store';
 import { shallow } from 'zustand/shallow';
 
@@ -6,13 +8,18 @@ const selector = (state) => ({
   edges: state.edges,
 });
 
+
 const API_BASE_URL = (process.env.REACT_APP_API_URL || 'http://localhost:8000').replace(/\/$/, '');
 
 export const SubmitButton = ({ className = '' }) => {
+  const [loading, setLoading] = useState(false);
   const { nodes, edges } = useStore(selector, shallow);
 
   const handleSubmit = async () => {
+    if (loading) return;
+
     try {
+      setLoading(true);
       const response = await fetch(`${API_BASE_URL}/pipelines/parse`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -30,12 +37,26 @@ export const SubmitButton = ({ className = '' }) => {
       );
     } catch (error) {
       alert(`Unable to parse pipeline. ${error.message}`);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <button className={`submit-button ${className}`.trim()} type="button" onClick={handleSubmit}>
-      Submit
+    <button
+      className={`submit-button ${loading ? 'is-loading' : ''} ${className}`.trim()}
+      type="button"
+      onClick={handleSubmit}
+      disabled={loading}
+    >
+      {loading ? (
+        <>
+          <LoaderCircle className="submit-button-loader" size={14} strokeWidth={2.25} aria-hidden="true" />
+          <span>Submitting...</span>
+        </>
+      ) : (
+        'Submit'
+      )}
     </button>
   );
 };
